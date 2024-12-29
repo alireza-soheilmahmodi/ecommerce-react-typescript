@@ -1,11 +1,20 @@
-import { Button } from "@/components/ui/button";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./layouts/Layout";
 
 function App() {
   return (
-    <>
-      <h1 className="bg-background">hello there</h1>
-      <Button>Click me</Button>
-    </>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <p>home page</p>
+            </Layout>
+          }
+        ></Route>
+      </Routes>
+    </Router>
   );
 }
 
