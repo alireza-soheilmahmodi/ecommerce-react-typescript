@@ -4,9 +4,10 @@ import { CiSearch } from "react-icons/ci";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Button } from "./ui/button";
 import { useAppContext } from "@/contexts/AppContext";
+import SignOutButton from "./SignOutButton";
 
 const Header = () => {
-  const { isLoggedIn } = useAppContext();
+  const { isLoggedIn, isAdmin } = useAppContext();
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -16,7 +17,16 @@ const Header = () => {
             <AiOutlineShoppingCart size={30} />
           </span>
           {isLoggedIn === true ? (
-            <></>
+            <span className="mr-3">
+              <SignOutButton />
+              {isAdmin ? (
+                <Button asChild className="mr-3">
+                  <Link to="/admin">داشبورد ادمین</Link>
+                </Button>
+              ) : (
+                ""
+              )}
+            </span>
           ) : (
             <span className="mr-4">
               <Button className="bg-gray-700" asChild>
