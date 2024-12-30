@@ -2,8 +2,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
+import { useAppContext } from "./contexts/AppContext";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
+  const { isAdmin } = useAppContext();
+
   return (
     <Router>
       <Routes>
@@ -15,6 +19,7 @@ function App() {
             </Layout>
           }
         ></Route>
+
         <Route
           path="/register"
           element={
@@ -23,6 +28,7 @@ function App() {
             </Layout>
           }
         ></Route>
+
         <Route
           path="/sign-in"
           element={
@@ -31,6 +37,35 @@ function App() {
             </Layout>
           }
         ></Route>
+
+        {isAdmin && (
+          <>
+            <Route
+              path="/admin"
+              element={<AdminLayout>admin dashboard</AdminLayout>}
+            />
+
+            <Route
+              path="/admin/products"
+              element={<AdminLayout>products</AdminLayout>}
+            />
+
+            <Route
+              path="/admin/orders"
+              element={<AdminLayout>orders</AdminLayout>}
+            />
+
+            <Route
+              path="/admin/customers"
+              element={<AdminLayout>customers</AdminLayout>}
+            />
+
+            <Route
+              path="/admin/reviews"
+              element={<AdminLayout>reviews</AdminLayout>}
+            />
+          </>
+        )}
       </Routes>
     </Router>
   );
