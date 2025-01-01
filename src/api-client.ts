@@ -43,3 +43,17 @@ export const signOut = async () => {
     throw new Error("مشکل در ارسال درخواست");
   }
 };
+
+export const addProduct = async (productFormData: FormData) => {
+  const response = await fetch(`${API_BASE_URL}/api/products`, {
+    method: "POST",
+    credentials: "include",
+    body: productFormData,
+  });
+
+  if (!response.ok) {
+    throw new Error("مشکلی در اضافه کردن محصول وجود دارد");
+  }
+
+  return response.json();
+};

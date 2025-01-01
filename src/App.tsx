@@ -4,6 +4,8 @@ import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import { useAppContext } from "./contexts/AppContext";
 import AdminLayout from "./layouts/AdminLayout";
+import AddProduct from "./pages/admin/AddProduct";
+import Products from "./pages/admin/Products";
 
 function App() {
   const { isAdmin } = useAppContext();
@@ -47,7 +49,20 @@ function App() {
 
             <Route
               path="/admin/products"
-              element={<AdminLayout>products</AdminLayout>}
+              element={
+                <AdminLayout>
+                  <Products />
+                </AdminLayout>
+              }
+            />
+
+            <Route
+              path="/admin/products/add"
+              element={
+                <AdminLayout>
+                  <AddProduct />
+                </AdminLayout>
+              }
             />
 
             <Route
