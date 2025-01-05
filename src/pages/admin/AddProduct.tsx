@@ -2,12 +2,15 @@ import { useAppContext } from "@/contexts/AppContext";
 import ManageProductForm from "@/forms/ManageProductForm/ManageProductForm";
 import { useMutation } from "react-query";
 import * as apiClient from "../../api-client";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
   const { showToast } = useAppContext();
+  const navigate = useNavigate();
   const { mutate, isLoading } = useMutation(apiClient.addProduct, {
     onSuccess: () => {
       showToast({ message: "محصول اضافه شد", type: "SUCCESS" });
+      navigate("/admin/products");
     },
     onError: () => {
       showToast({
@@ -18,9 +21,6 @@ const AddProduct = () => {
   });
 
   const handleSave = (productFormData: FormData) => {
-    for (const [key, value] of productFormData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
     mutate(productFormData);
   };
 

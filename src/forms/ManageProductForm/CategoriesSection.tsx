@@ -1,11 +1,12 @@
 import { useFormContext } from "react-hook-form";
 import { ProductFormData } from "./ManageProductForm";
+import { useQuery } from "react-query";
+import * as apiClient from "../../api-client";
 
-const categories = [
-  { id: 1, name: "مردانه" },
-  { id: 2, name: "زنانه" },
-  { id: 3, name: "بجگانه" },
-];
+export type Category = {
+  id: number;
+  name: string;
+};
 
 const CategoriesSection = () => {
   const {
@@ -13,32 +14,43 @@ const CategoriesSection = () => {
     formState: { errors },
   } = useFormContext<ProductFormData>();
 
+  const { data: categories } = useQuery("fetchCategories", () =>
+    apiClient.fetchAllCategories()
+  );
+
+  if (!categories) return "loading...";
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-3">دسته بندی محصول</h2>
       <div className="grid grid-cols-5 gap-3">
-        {categories.map((category, index) => (
-          <label className="text-sm flex gap-1 text-gray-700" key={index}>
-            <input
-              type="checkbox"
-              value={category.id}
-              {...register("categoryIds", {
-                validate: (categoryIds) => {
-                  if (categoryIds && categoryIds.length > 0) {
-                    return true;
-                  } else {
-                    return "حداقل یک دسته بندی نیاز است";
-                  }
-                },
-              })}
-            />
-            {category.name}
-          </label>
-        ))}
+        {(categories as Category[]).map((category) => {
+          return (
+            <label
+              className="text-sm flex gap-1 text-gray-700"
+              key={category.id}
+            >
+              <input
+                type="checkbox"
+                value={category.id}
+                {...register("categories", {
+                  validate: (categories) => {
+                    if (categories && categories.length > 0) {
+                      return true;
+                    } else {
+                      return "حداقل یک دسته بندی نیاز است";
+                    }
+                  },
+                })}
+              />
+              {category.name}
+            </label>
+          );
+        })}
       </div>
-      {errors.categoryIds && (
+      {errors.categories && (
         <span className="text-red-500 text-sm font-bold">
-          {errors.categoryIds.message}
+          {errors.categories.message}
         </span>
       )}
     </div>
