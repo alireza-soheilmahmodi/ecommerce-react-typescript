@@ -10,7 +10,7 @@ const EditProduct = () => {
   const navigate = useNavigate();
   const { data: product } = useQuery(
     ["fetchProductById", productId || ""],
-    () => apiClient.fetchProductById(productId || ""),
+    () => apiClient.fetchProductByIdAdmin(productId || ""),
     { enabled: !!productId }
   );
 

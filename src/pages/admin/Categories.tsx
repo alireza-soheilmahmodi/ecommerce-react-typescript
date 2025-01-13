@@ -38,6 +38,19 @@ const Categories = () => {
     },
   });
 
+  const { mutate: deleteCategory, isLoading: isLoadingDelete } = useMutation(
+    apiClient.deleteCategory,
+    {
+      onSuccess: () => {
+        showToast({ message: "دسته بندی حذف شد", type: "SUCCESS" });
+        navigate(0);
+      },
+      onError: (error: Error) => {
+        showToast({ message: error.message, type: "ERROR" });
+      },
+    }
+  );
+
   const handleAddCategory = () => {
     if (newCategory.length > 0) {
       mutate(newCategory);
@@ -45,13 +58,34 @@ const Categories = () => {
   };
 
   if (!categories || categories.length === 0) {
-    return <span>دسته بندی ای وجود ندارد</span>;
+    return (
+      <div>
+        <h4>دسته بندی ای وجود ندارد</h4>
+        <div className="flex gap-3 items-end mt-5">
+          <label className="flex items-center">
+            دسته بندی جدید:
+            <input
+              type="text"
+              className="p-2 mr-2 border"
+              onChange={(e) => setNewCategory(e.target.value)}
+            />
+          </label>
+          <Button
+            className=" bg-blue-500 rounded-none"
+            onClick={handleAddCategory}
+            disabled={isLoading}
+          >
+            اضافه کردن
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div>
       <h1 className="text-2xl">دسته بندی ها</h1>
-      <div className="flex gap-3 items-end">
+      <div className="flex gap-3 items-end mt-5">
         <label className="flex items-center">
           دسته بندی جدید:
           <input
@@ -95,7 +129,13 @@ const Categories = () => {
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem className="p-0">
-                        <Button className="w-full bg-red-500">حذف</Button>
+                        <Button
+                          className="w-full bg-red-500"
+                          onClick={() => deleteCategory(String(category.id))}
+                          disabled={isLoadingDelete}
+                        >
+                          حذف
+                        </Button>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

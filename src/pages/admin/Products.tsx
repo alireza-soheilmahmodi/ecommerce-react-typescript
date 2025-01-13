@@ -13,14 +13,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CiCircleMore, CiViewTable } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
+import { Category } from "@/forms/ManageProductForm/CategoriesSection";
 
-type Product = {
+export type Product = {
   id: number;
   name: string;
   description: string;
   price: number;
   stock: number;
   imageUrl: string;
+  categories: Category[];
+  Review: Review[];
+};
+
+type Review = {
+  rating: number;
+  comment: string;
+  user: User;
+};
+
+type User = {
+  firstName: string;
+  lastName: string;
 };
 
 const Products = () => {
@@ -50,18 +64,20 @@ const Products = () => {
     return (
       <div className="flex justify-between">
         <h4 className="text-2xl">محصولی وجود ندارد</h4>
-        <Button asChild>
-          <Link to="add">
-            اضافه کردن محصول
-            <FaPlus />
-          </Link>
-        </Button>
-        <Button asChild>
-          <Link to="categories">
-            دسته بندی ها
-            <CiViewTable />
-          </Link>
-        </Button>
+        <div className="flex gap-3">
+          <Button asChild>
+            <Link to="add">
+              اضافه کردن محصول
+              <FaPlus />
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link to="categories">
+              دسته بندی ها
+              <CiViewTable />
+            </Link>
+          </Button>
+        </div>
       </div>
     );
   }
@@ -97,7 +113,9 @@ const Products = () => {
             </TableRow>
             {(products as Product[]).map((product) => (
               <TableRow key={product.id}>
-                <TableCell>{product.name}</TableCell>
+                <TableCell>
+                  <Link to={`/products/${product.id}`}>{product.name}</Link>
+                </TableCell>
                 <TableCell>
                   {product.description.length > 20
                     ? product.description.slice(0, 20) + "..."

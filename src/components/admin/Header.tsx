@@ -57,6 +57,16 @@ const Header = () => {
           >
             نظرات
           </NavLink>
+          <NavLink
+            to="/admin/slider"
+            className={({ isActive }) =>
+              isActive
+                ? "text-white p-5 bg-blue-800 hover:bg-blue-800"
+                : "text-white p-5 hover:bg-blue-800"
+            }
+          >
+            اسلایدر
+          </NavLink>
         </div>
 
         <SignOutButton />

@@ -1,4 +1,5 @@
 import { Category } from "./forms/ManageProductForm/CategoriesSection";
+import { AddReviewForm } from "./forms/ReviewForm/AddReview";
 import { RegisterFormData } from "./pages/Register";
 import { SignInFormData } from "./pages/SignIn";
 
@@ -102,7 +103,7 @@ export const deleteProduct = async (id: number) => {
   return response.json();
 };
 
-export const fetchProductById = async (productId: string) => {
+export const fetchProductByIdAdmin = async (productId: string) => {
   const response = await fetch(`${API_BASE_URL}/api/products/${productId}`, {
     credentials: "include",
   });
@@ -117,6 +118,18 @@ export const fetchProductById = async (productId: string) => {
   );
   product.imageUrl = product.imageUrl.split(",");
   return product;
+};
+
+export const fetchProductById = async (productId: string) => {
+  const response = await fetch(`${API_BASE_URL}/api/products/${productId}`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("مشکلی در دریافت محصول وجود دارد");
+  }
+
+  return response.json();
 };
 
 export const fetchAllCategories = async () => {
@@ -160,6 +173,124 @@ export const addCategory = async (category: string) => {
 
   if (!response.ok) {
     throw new Error("مشکلی در اضافه کردن دسته بندی وجود دارد");
+  }
+
+  return response.json();
+};
+
+export const deleteCategory = async (categoryId: string) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/products/categories/${categoryId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    }
+  );
+  if (!response.ok) {
+    throw new Error("مشکلی در حذف کردن دسته بندی وجود دارد");
+  }
+
+  return response.json();
+};
+
+export const fetchUsers = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/users/users`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("مشکلی در دریافت کاربران وجود دارد");
+  }
+
+  return response.json();
+};
+
+export const addReview = async (formData: AddReviewForm) => {
+  const response = await fetch(`${API_BASE_URL}/api/products/addReview`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const responseBody = await response.json();
+
+  if (
+    !response.ok &&
+    responseBody.message === "You have already reviewed this product."
+  ) {
+    throw new Error("شما قبلا نظر خود را ثبت کرده اید");
+  }
+
+  if (!response.ok) {
+    throw new Error("مشکلی در ثبت نظر پیش آمده است");
+  }
+
+  return response;
+};
+
+export const addSlider = async (sliderFormData: FormData) => {
+  const response = await fetch(`${API_BASE_URL}/api/products/addSlider`, {
+    method: "POST",
+    credentials: "include",
+    body: sliderFormData,
+  });
+
+  if (!response.ok) {
+    throw new Error("مشکلی در اضافه کردن اسلایدر وجود دارد");
+  }
+
+  return response.json();
+};
+
+export const fetchSlides = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/products/slides`);
+
+  if (!response.ok) {
+    throw new Error("خطا");
+  }
+
+  return response.json();
+};
+
+export const deleteSlider = async (id: number) => {
+  const response = await fetch(`${API_BASE_URL}/api/products/slider/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("مشکلی در حذف اسلاید وجود دارد");
+  }
+
+  return response.json();
+};
+
+export type SearchParams = {
+  category: string;
+  lowPrice: string;
+  highPrice: string;
+  searchQuery?: string;
+  page: number;
+};
+
+export const searchProducts = async (searchParams: SearchParams) => {
+  const queryParams = new URLSearchParams();
+
+  queryParams.append("category", searchParams.category || "");
+  queryParams.append("lowPrice", searchParams.lowPrice || "");
+  queryParams.append("highPrice", searchParams.highPrice || "");
+  queryParams.append("searchQuery", searchParams.searchQuery || "");
+  queryParams.append("page", searchParams.page.toString() || "");
+
+  const response = await fetch(
+    `${API_BASE_URL}/api/products/search?${queryParams}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Error fetching hotels");
   }
 
   return response.json();

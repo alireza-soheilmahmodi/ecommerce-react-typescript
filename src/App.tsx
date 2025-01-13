@@ -8,6 +8,12 @@ import AddProduct from "./pages/admin/AddProduct";
 import Products from "./pages/admin/Products";
 import EditProduct from "./pages/admin/EditProduct";
 import Categories from "./pages/admin/Categories";
+import Users from "./pages/admin/Users";
+import Product from "./pages/Product";
+import Slides from "./pages/admin/Slides";
+import AddSlider from "./forms/SliderForm/AddSlider";
+import MainPage from "./pages/MainPage";
+import Search from "./pages/Search";
 
 function App() {
   const { isAdmin } = useAppContext();
@@ -19,7 +25,7 @@ function App() {
           path="/"
           element={
             <Layout>
-              <p>home page</p>
+              <MainPage />
             </Layout>
           }
         ></Route>
@@ -42,11 +48,38 @@ function App() {
           }
         ></Route>
 
+        <Route
+          path="/products/:productId"
+          element={
+            <Layout>
+              <Product />
+            </Layout>
+          }
+        ></Route>
+
+        <Route
+          path="/search/:searchQuery?"
+          element={
+            <Layout>
+              <Search />
+            </Layout>
+          }
+        ></Route>
+
         {isAdmin && (
           <>
             <Route
               path="/admin"
               element={<AdminLayout>admin dashboard</AdminLayout>}
+            />
+
+            <Route
+              path="/admin/customers"
+              element={
+                <AdminLayout>
+                  <Users />
+                </AdminLayout>
+              }
             />
 
             <Route
@@ -91,13 +124,26 @@ function App() {
             />
 
             <Route
-              path="/admin/customers"
-              element={<AdminLayout>customers</AdminLayout>}
+              path="/admin/reviews"
+              element={<AdminLayout>reviews</AdminLayout>}
             />
 
             <Route
-              path="/admin/reviews"
-              element={<AdminLayout>reviews</AdminLayout>}
+              path="/admin/slider"
+              element={
+                <AdminLayout>
+                  <Slides />
+                </AdminLayout>
+              }
+            />
+
+            <Route
+              path="/admin/slider/add"
+              element={
+                <AdminLayout>
+                  <AddSlider />
+                </AdminLayout>
+              }
             />
           </>
         )}

@@ -1,13 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { CiSearch } from "react-icons/ci";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Button } from "./ui/button";
 import { useAppContext } from "@/contexts/AppContext";
 import SignOutButton from "./SignOutButton";
+import { FormEvent, useState } from "react";
 
 const Header = () => {
   const { isLoggedIn, isAdmin } = useAppContext();
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (event: FormEvent) => {
+    event.preventDefault();
+    navigate(`/search/${searchQuery}`);
+  };
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -42,8 +50,14 @@ const Header = () => {
         </div>
         <div className="flex flex-1 justify-end">
           <div className="relative w-1/2">
-            <CiSearch className="absolute right-2 top-[32%]" />
-            <Input placeholder="جستجو محصولات..." className="pr-8" />
+            <form onSubmit={handleSearch}>
+              <CiSearch className="absolute right-2 top-[32%]" />
+              <Input
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="جستجو محصولات..."
+                className="pr-8"
+              />
+            </form>
           </div>
         </div>
       </div>
