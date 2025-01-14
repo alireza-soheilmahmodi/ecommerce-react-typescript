@@ -47,17 +47,17 @@ const SlideShow = () => {
   if (!slides) return <></>;
 
   return (
-    <div className="w-full min-h-[600px] relative">
+    <div className="w-full relative">
       <img
         src={`${slides[imageIndex].imageUrl}`}
         alt={slides[imageIndex].alt}
         className="w-full"
       />
-      <div className="flex absolute bottom-20 right-20">
-        <a className="px-2 text-2xl cursor-pointer" onClick={nextImage}>
+      <div className="flex absolute bottom-10 right-10">
+        <a className="px-2 lg:text-2xl cursor-pointer" onClick={nextImage}>
           <FaArrowRight />
         </a>
-        <a className="px-2 text-2xl cursor-pointer" onClick={prevImage}>
+        <a className="px-2 lg:text-2xl cursor-pointer" onClick={prevImage}>
           <FaArrowLeft />
         </a>
       </div>

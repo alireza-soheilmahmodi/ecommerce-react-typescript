@@ -58,7 +58,7 @@ function App() {
         ></Route>
 
         <Route
-          path="/search/:searchQuery?"
+          path="/search"
           element={
             <Layout>
               <Search />

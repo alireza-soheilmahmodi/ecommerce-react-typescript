@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import SignOutButton from "../SignOutButton";
 import { NavLink } from "react-router-dom";
+import { Button } from "../ui/button";
 
 const Header = () => {
   return (
@@ -68,8 +70,13 @@ const Header = () => {
             اسلایدر
           </NavLink>
         </div>
+        <div className="flex gap-1">
+          <Button className="bg-white text-black hover:bg-gray-200" asChild>
+            <Link to="/">صفحه اصلی</Link>
+          </Button>
 
-        <SignOutButton />
+          <SignOutButton />
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterCategory from "@/components/FilterCategory";
 import FilterPrice from "@/components/FilterPrice";
 import ShowSearchProducts from "@/components/ShowSearchProducts";
@@ -8,15 +8,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useParams } from "react-router-dom";
+
+import { useSearchParams } from "react-router-dom";
 
 const Search = () => {
-  const { searchQuery } = useParams();
+  const [searchParams] = useSearchParams();
+
+  const searchQueryParam = searchParams.get("query") || undefined;
+  const categoryParam = searchParams.get("category") || "";
 
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLowPrice, setSelectedLowPrice] = useState("");
   const [selectedHighPrice, setSelectedHighPrice] = useState("");
+
+  useEffect(() => {
+    setSelectedCategory(categoryParam);
+  }, [categoryParam]);
 
   const handleChangeCategory = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -62,7 +70,7 @@ const Search = () => {
         category={selectedCategory}
         lowPrice={selectedLowPrice}
         highPrice={selectedHighPrice}
-        searchQuery={searchQuery}
+        searchQuery={searchQueryParam}
         page={page}
         setPage={setPage}
       />

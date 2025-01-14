@@ -18,6 +18,7 @@ import { IoShieldCheckmarkOutline } from "react-icons/io5";
 import AddReview from "@/forms/ReviewForm/AddReview";
 import { useState } from "react";
 import Review from "@/components/Review";
+import { IoIosStar } from "react-icons/io";
 
 const Product = () => {
   const { productId } = useParams();
@@ -72,7 +73,24 @@ const Product = () => {
           </Carousel>
         </div>
         <div className="flex flex-col justify-between gap-5">
-          <h2 className=" text-2xl">{product.name}</h2>
+          <div>
+            <span className="flex items-center gap-1">
+              {product.Review.length > 0 &&
+                product.Review.reduce(
+                  (accumulator, currentValue) =>
+                    accumulator + currentValue.rating,
+                  0
+                ) / product.Review.length}
+              {product.Review.length > 0 && (
+                <span className="flex items-center text-gray-500 gap-1">
+                  <IoIosStar className="text-yellow-500" />(
+                  {product.Review.length} امتیاز )
+                </span>
+              )}
+            </span>
+            <h2 className=" text-2xl">{product.name}</h2>
+          </div>
+
           <p className="text-3xl">
             {priceFormatter(String(product.price))}
             <span className="text-lg font-bold">تومان</span>

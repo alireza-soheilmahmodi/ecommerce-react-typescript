@@ -14,7 +14,7 @@ const Header = () => {
 
   const handleSearch = (event: FormEvent) => {
     event.preventDefault();
-    navigate(`/search/${searchQuery}`);
+    navigate(`/search?query=${searchQuery}`);
   };
 
   return (
