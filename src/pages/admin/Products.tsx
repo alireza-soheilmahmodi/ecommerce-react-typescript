@@ -23,7 +23,7 @@ export type Product = {
   stock: number;
   imageUrl: string;
   categories: Category[];
-  Review: Review[];
+  Review?: Review[];
 };
 
 type Review = {
@@ -40,7 +40,7 @@ type User = {
 const Products = () => {
   const { showToast } = useAppContext();
   const navigate = useNavigate();
-  const { data: products } = useQuery(
+  const { data: products, isLoading: LoadingProducts } = useQuery(
     "fetchProducts",
     apiClient.fetchProducts,
     {
@@ -59,6 +59,8 @@ const Products = () => {
       showToast({ message: error.message, type: "ERROR" });
     },
   });
+
+  if (LoadingProducts) return <>در حال بارگذاری...</>;
 
   if (!products || products.length === 0) {
     return (

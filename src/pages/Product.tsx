@@ -13,28 +13,38 @@ import { Card, CardContent } from "@/components/ui/card";
 import { priceFormatter } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { CiHeart } from "react-icons/ci";
-import { FaTruck } from "react-icons/fa";
+import { FaMinus, FaTruck } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa6";
 import { IoShieldCheckmarkOutline } from "react-icons/io5";
 import AddReview from "@/forms/ReviewForm/AddReview";
 import { useState } from "react";
 import Review from "@/components/Review";
 import { IoIosStar } from "react-icons/io";
+import useCartStore from "@/store/cartStore";
+import { useAppContext } from "@/contexts/AppContext";
 
 const Product = () => {
   const { productId } = useParams();
   const [showAddReview, setShowAddReview] = useState(false);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
+  const cart = useCartStore((state) => state.cart);
+  const { showToast } = useAppContext();
 
-  const { data: product } = useQuery<ProductType>(
+  const { data: product, isLoading } = useQuery<ProductType>(
     ["fetchProductById", productId],
     () => apiClient.fetchProductById(productId as string),
     { enabled: !!productId }
   );
 
-  const imageUrl = product?.imageUrl.split(",");
+  if (isLoading) return <>در حال بارگذاری...</>;
 
   if (!product) {
     return <>محصول موردنظر یافت نشد</>;
   }
+
+  const imageUrl = product?.imageUrl.split(",");
+  const existProduct = cart.find((item) => item.id === product?.id);
 
   return (
     <div className="space-y-6">
@@ -75,13 +85,14 @@ const Product = () => {
         <div className="flex flex-col justify-between gap-5">
           <div>
             <span className="flex items-center gap-1">
-              {product.Review.length > 0 &&
+              {product.Review &&
+                product.Review.length > 0 &&
                 product.Review.reduce(
                   (accumulator, currentValue) =>
                     accumulator + currentValue.rating,
                   0
                 ) / product.Review.length}
-              {product.Review.length > 0 && (
+              {product.Review && product.Review.length > 0 && (
                 <span className="flex items-center text-gray-500 gap-1">
                   <IoIosStar className="text-yellow-500" />(
                   {product.Review.length} امتیاز )
@@ -104,9 +115,45 @@ const Product = () => {
             </p>
           </div>
           <div className="flex gap-4">
-            <Button className="w-2/3 rounded-none p-8 text-lg">
-              افزودن به سبد خرید
-            </Button>
+            {existProduct ? (
+              <div className="flex justify-center items-center w-2/3 text-lg">
+                <Button
+                  onClick={() => {
+                    addToCart({ ...product, Review: undefined });
+                    showToast({
+                      message: "محصول به سبد خرید اضافه شد",
+                      type: "SUCCESS",
+                    });
+                  }}
+                  disabled={product.stock <= existProduct.quantity}
+                >
+                  <FaPlus />
+                </Button>
+                <span className="px-4">{existProduct.quantity}</span>
+                <Button
+                  onClick={() => {
+                    decreaseQuantity(product.id);
+                  }}
+                >
+                  <FaMinus />
+                </Button>
+              </div>
+            ) : (
+              <Button
+                className="w-2/3 rounded-none p-8 text-lg"
+                onClick={() => {
+                  addToCart({ ...product, Review: undefined });
+                  showToast({
+                    message: "محصول به سبد خرید اضافه شد",
+                    type: "SUCCESS",
+                  });
+                }}
+                disabled={product.stock === 0}
+              >
+                {product.stock !== 0 ? "افزودن به سبد خرید" : "موجود نیست"}
+              </Button>
+            )}
+
             <Button className="rounded-none p-8 bg-white text-black hover:bg-black hover:text-white">
               <CiHeart className="scale-[300%]" />
             </Button>
@@ -128,18 +175,21 @@ const Product = () => {
         </Button>
         {showAddReview && <AddReview productId={product.id} />}
       </div>
-      {product.Review.length > 0 && <h5 className="text-xl">نظرات</h5>}
-      {product.Review.map((review, index) => (
-        <div key={index}>
-          <Review
-            rate={review.rating}
-            comment={review.comment}
-            firstName={review.user.firstName}
-            lastName={review.user.lastName}
-          />
-          {index + 1 !== product.Review.length && <hr className="mt-3" />}
-        </div>
-      ))}
+      {product.Review && product.Review.length > 0 && (
+        <h5 className="text-xl">نظرات</h5>
+      )}
+      {product.Review &&
+        product.Review.map((review, index) => (
+          <div key={index}>
+            <Review
+              rate={review.rating}
+              comment={review.comment}
+              firstName={review.user.firstName}
+              lastName={review.user.lastName}
+            />
+            {index + 1 !== product.Review?.length && <hr className="mt-3" />}
+          </div>
+        ))}
       <hr />
     </div>
   );

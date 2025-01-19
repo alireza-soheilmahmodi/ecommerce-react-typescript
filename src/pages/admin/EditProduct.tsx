@@ -8,7 +8,7 @@ const EditProduct = () => {
   const { productId } = useParams();
   const { showToast } = useAppContext();
   const navigate = useNavigate();
-  const { data: product } = useQuery(
+  const { data: product, isLoading: isLoadingProduct } = useQuery(
     ["fetchProductById", productId || ""],
     () => apiClient.fetchProductByIdAdmin(productId || ""),
     { enabled: !!productId }
@@ -27,6 +27,8 @@ const EditProduct = () => {
   const handleSave = (productFormData: FormData) => {
     mutate(productFormData);
   };
+
+  if (isLoadingProduct) return <>در حال بارگذاری</>;
 
   if (!product) {
     return <>محصولی یافت نشد</>;

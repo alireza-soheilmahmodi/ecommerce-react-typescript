@@ -11,7 +11,7 @@ import {
 import { CiCircleMore } from "react-icons/ci";
 import { Button } from "@/components/ui/button";
 
-type User = {
+export type User = {
   firstName: string;
   lastName: string;
   email: string;
@@ -20,11 +20,17 @@ type User = {
 
 const Users = () => {
   const { showToast } = useAppContext();
-  const { data: users } = useQuery("fetchUsers", apiClient.fetchUsers, {
-    onError: (error: Error) => {
-      showToast({ message: error.message, type: "ERROR" });
-    },
-  });
+  const { data: users, isLoading } = useQuery(
+    "fetchUsers",
+    apiClient.fetchUsers,
+    {
+      onError: (error: Error) => {
+        showToast({ message: error.message, type: "ERROR" });
+      },
+    }
+  );
+
+  if (isLoading) return <>در حال بارگذاری...</>;
 
   if (!users || users.length === 0) {
     return <span>کاربری وجود ندارد</span>;

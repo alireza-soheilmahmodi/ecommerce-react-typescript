@@ -14,6 +14,8 @@ import Slides from "./pages/admin/Slides";
 import AddSlider from "./forms/SliderForm/AddSlider";
 import MainPage from "./pages/MainPage";
 import Search from "./pages/Search";
+import Cart from "./pages/Cart";
+import Orders from "./pages/admin/Orders";
 
 function App() {
   const { isAdmin } = useAppContext();
@@ -62,6 +64,15 @@ function App() {
           element={
             <Layout>
               <Search />
+            </Layout>
+          }
+        ></Route>
+
+        <Route
+          path="/cart"
+          element={
+            <Layout>
+              <Cart />
             </Layout>
           }
         ></Route>
@@ -120,7 +131,11 @@ function App() {
 
             <Route
               path="/admin/orders"
-              element={<AdminLayout>orders</AdminLayout>}
+              element={
+                <AdminLayout>
+                  <Orders />
+                </AdminLayout>
+              }
             />
 
             <Route

@@ -40,6 +40,8 @@ const Slides = () => {
     },
   });
 
+  if (isLoading) return <>در حال بارگذاری...</>;
+
   if (!slides) {
     return <>no slides</>;
   }

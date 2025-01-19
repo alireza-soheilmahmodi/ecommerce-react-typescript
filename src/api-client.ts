@@ -295,3 +295,65 @@ export const searchProducts = async (searchParams: SearchParams) => {
 
   return response.json();
 };
+
+type ProductOrder = {
+  productId: number;
+  quantity: number;
+};
+
+export const placeOrder = async (products: ProductOrder[]) => {
+  const response = await fetch(`${API_BASE_URL}/api/orders`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ products }),
+  });
+
+  const responseBody = await response.json();
+
+  if (!response.ok) {
+    throw new Error(responseBody.message);
+  }
+};
+
+export const fetchOrders = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/orders`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("مشکلی در دریافت سفارشات وجود دارد");
+  }
+
+  return response.json();
+};
+
+export const fetchOrderDetails = async (orderId: string) => {
+  const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("مشکلی در دریافت سفارش وجود دارد");
+  }
+
+  return response.json();
+};
+
+export const changeOrderStatus = async (id: number) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/orders/changeStatus/${id}`,
+    {
+      method: "PUT",
+      credentials: "include",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("مشکلی در تغییر وضعیت سفارش وجود دارد");
+  }
+
+  return response.json();
+};

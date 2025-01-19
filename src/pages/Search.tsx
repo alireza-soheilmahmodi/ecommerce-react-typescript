@@ -26,11 +26,20 @@ const Search = () => {
     setSelectedCategory(categoryParam);
   }, [categoryParam]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [
+    searchQueryParam,
+    categoryParam,
+    selectedCategory,
+    selectedLowPrice,
+    selectedHighPrice,
+  ]);
+
   const handleChangeCategory = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedCategory(event.target.value);
-    setPage(1);
   };
 
   return (
@@ -51,7 +60,6 @@ const Search = () => {
               selectedPrice={selectedLowPrice}
               onValueCommit={(value) => {
                 setSelectedLowPrice(value[0].toString());
-                setPage(1);
               }}
             />
             <DropdownMenuSeparator />
@@ -60,7 +68,6 @@ const Search = () => {
               selectedPrice={selectedHighPrice}
               onValueCommit={(value) => {
                 setSelectedHighPrice(value[0].toString());
-                setPage(1);
               }}
             />
           </DropdownMenuContent>

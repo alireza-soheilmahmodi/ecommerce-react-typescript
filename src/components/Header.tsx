@@ -6,11 +6,13 @@ import { Button } from "./ui/button";
 import { useAppContext } from "@/contexts/AppContext";
 import SignOutButton from "./SignOutButton";
 import { FormEvent, useState } from "react";
+import useCartStore from "@/store/cartStore";
 
 const Header = () => {
   const { isLoggedIn, isAdmin } = useAppContext();
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const cart = useCartStore((state) => state.cart);
 
   const handleSearch = (event: FormEvent) => {
     event.preventDefault();
@@ -21,9 +23,21 @@ const Header = () => {
     <div className="flex flex-col justify-center items-center">
       <div className="flex flex-row justify-between items-center w-full">
         <div className="flex flex-1">
-          <span>
-            <AiOutlineShoppingCart size={30} />
-          </span>
+          <div className="relative">
+            <Link to="/cart">
+              {cart.length > 0 && (
+                <div className="absolute flex items-center justify-center w-3 h-3 p-2  rounded-full bg-red-500 text-white text-xs top-0 right-0">
+                  {cart.reduce(
+                    (accumulator, currentValue) =>
+                      accumulator + currentValue.quantity,
+                    0
+                  )}
+                </div>
+              )}
+
+              <AiOutlineShoppingCart size={30} />
+            </Link>
+          </div>
           {isLoggedIn === true ? (
             <span className="mr-3">
               <SignOutButton />
