@@ -16,6 +16,7 @@ import MainPage from "./pages/MainPage";
 import Search from "./pages/Search";
 import Cart from "./pages/Cart";
 import Orders from "./pages/admin/Orders";
+import Reviews from "./pages/admin/Reviews";
 
 function App() {
   const { isAdmin } = useAppContext();
@@ -140,7 +141,11 @@ function App() {
 
             <Route
               path="/admin/reviews"
-              element={<AdminLayout>reviews</AdminLayout>}
+              element={
+                <AdminLayout>
+                  <Reviews />
+                </AdminLayout>
+              }
             />
 
             <Route

@@ -10,7 +10,11 @@ const Review = ({ rate, comment, firstName, lastName }: Props) => {
     <div className="flex">
       <div
         className={`flex justify-center items-center text-xl h-fit ${
-          rate > 3 ? "bg-green-500 text-white" : "bg-red-500 text-white"
+          rate >= 4
+            ? "bg-green-500 text-white"
+            : rate === 3
+            ? "bg-orange-500 text-white"
+            : "bg-red-500 text-white"
         } px-3 py-2`}
       >
         {rate}

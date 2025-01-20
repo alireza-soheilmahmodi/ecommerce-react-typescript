@@ -105,9 +105,11 @@ const Cart = () => {
           ""
         )}
 
-        <Button onClick={clearCart} className="bg-red-500 w-fit">
-          خالی کردن سبد خرید
-        </Button>
+        {cart.length > 0 && (
+          <Button onClick={clearCart} className="bg-red-500 w-fit">
+            خالی کردن سبد خرید
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -357,3 +357,28 @@ export const changeOrderStatus = async (id: number) => {
 
   return response.json();
 };
+
+export const fetchReviews = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/reviews`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("مشکلی در دریافت نظرات وجود دارد");
+  }
+
+  return response.json();
+};
+
+export const deleteReview = async (id: number) => {
+  const response = await fetch(`${API_BASE_URL}/api/reviews/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("مشکلی در حذف نظر وجود دارد");
+  }
+
+  return response.json();
+};
